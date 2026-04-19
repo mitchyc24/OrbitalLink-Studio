@@ -1,0 +1,22 @@
+[project]
+name = "orbital-link-studio"
+version = "0.1.0"
+description = "LEO satellite communication link simulator backend"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.116.0,<1.0.0",
+    "uvicorn>=0.35.0,<1.0.0",
+    "pydantic>=2.11.0,<3.0.0",
+    "sqlalchemy>=2.0.0,<3.0.0",
+    "numpy>=2.2.0,<3.0.0",
+    "pandas>=2.3.0,<3.0.0",
+    "openpyxl>=3.1.0,<4.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=69.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["orbital_link*"]
