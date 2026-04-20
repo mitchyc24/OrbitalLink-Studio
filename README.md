@@ -8,6 +8,7 @@ Minimal backend implementation of a LEO (~1400 km) satellite communication link 
 - Scenario and terminal domain models aligned with the requested schema
 - FastAPI endpoints for link analysis and Excel scenario import/export
 - Excel round-trip support for terminal bulk updates
+- Built-in Web UI for link budget analysis and scenario import/export
 
 ## Run locally
 
@@ -15,6 +16,8 @@ Minimal backend implementation of a LEO (~1400 km) satellite communication link 
 pip install -e .
 uvicorn orbital_link.api:app --reload
 ```
+
+Then open http://127.0.0.1:8000/ in your browser.
 
 ## Run tests
 
