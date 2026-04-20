@@ -10,7 +10,7 @@ class ApiUiTests(unittest.TestCase):
         self.assertIn("OrbitalLink Studio Web UI", response)
         self.assertIn("linkBudgetForm", response)
 
-    def test_link_budget_endpoint_still_available(self) -> None:
+    def test_link_budget_endpoint_returns_expected_fields(self) -> None:
         response = run_link_budget(
             LinkBudgetRequest(
                 eirp_dbw=60.0,
@@ -25,6 +25,8 @@ class ApiUiTests(unittest.TestCase):
 
         self.assertIn("throughput_bps", response)
         self.assertIn("link_margin_db", response)
+        self.assertAlmostEqual(response["throughput_bps"], 1_980_000.0, places=6)
+        self.assertAlmostEqual(response["spectral_efficiency_bps_hz"], 0.99, places=6)
 
 
 if __name__ == "__main__":

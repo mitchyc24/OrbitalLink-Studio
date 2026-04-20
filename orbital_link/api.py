@@ -2,6 +2,7 @@
 
 from dataclasses import asdict
 from io import BytesIO
+import json
 
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import HTMLResponse, StreamingResponse
@@ -33,6 +34,14 @@ def _web_ui_html() -> str:
     modcod_options = "".join(
         f'<option value="{modcod.name}">{modcod.name}</option>' for modcod in MODCOD_TABLE
     )
+    default_scenario_json = json.dumps(
+        {
+            "id": 1,
+            "name": "demo",
+            "target_satellite": {"id": 1, "name": "LEO-A"},
+            "terminals": [],
+        }
+    )
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -60,11 +69,9 @@ def _web_ui_html() -> str:
       <label>Atmospheric Loss (dB)<input type="number" step="any" name="atmospheric_loss_db" value="2" required /></label>
       <label>G/T (dB/K)<input type="number" step="any" name="g_over_t_db_k" value="15" required /></label>
       <label>Allocated Bandwidth (Hz)<input type="number" step="any" name="allocated_bandwidth_hz" value="2000000" required /></label>
-      <label>MODCOD
-        <select name="modcod_name">{modcod_options}</select>
-      </label>
+      <label for="modcodName">MODCOD (Modulation and Coding)<select id="modcodName" name="modcod_name">{modcod_options}</select></label>
       <label>Priority Level<input type="number" min="1" max="10" name="priority_level" value="1" required /></label>
-      <label><input type="checkbox" name="is_obfuscated" /> Obfuscated</label>
+      <label for="isObfuscated">Obfuscated<input id="isObfuscated" type="checkbox" name="is_obfuscated" /></label>
       <label>Nominal Beam Diameter (km)<input type="number" step="any" name="nominal_beam_diameter_km" value="30" required /></label>
       <button type="submit">Run Link Budget</button>
     </form>
@@ -74,7 +81,7 @@ def _web_ui_html() -> str:
     <h2>Scenario Export</h2>
     <form id="exportForm">
       <label>Scenario JSON
-        <textarea id="scenarioJson">{{"id":1,"name":"demo","target_satellite":{{"id":1,"name":"LEO-A"}},"terminals":[]}}</textarea>
+        <textarea id="scenarioJson">{default_scenario_json}</textarea>
       </label>
       <button type="submit">Download Excel</button>
     </form>
@@ -82,7 +89,9 @@ def _web_ui_html() -> str:
   <section>
     <h2>Scenario Import</h2>
     <form id="importForm">
-      <label>Excel file<input type="file" id="scenarioFile" accept=".xlsx" required /></label>
+      <label for="scenarioFile">Excel file
+        <input type="file" id="scenarioFile" accept=".xlsx" required />
+      </label>
       <button type="submit">Import Scenario</button>
     </form>
     <pre id="importResult"></pre>
